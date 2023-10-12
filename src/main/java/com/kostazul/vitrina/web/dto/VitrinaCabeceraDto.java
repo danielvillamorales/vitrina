@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -39,4 +40,9 @@ public class VitrinaCabeceraDto {
      * bodega de la cabecera de la vitrina.
      */
     private VitrinaBodegaDto bodega;
+
+    /**
+     * imagenes de la Vitrina.
+     */
+    private List<String> imagenes;
 }

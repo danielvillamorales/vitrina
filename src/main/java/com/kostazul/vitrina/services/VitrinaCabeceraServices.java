@@ -1,7 +1,9 @@
 package com.kostazul.vitrina.services;
 
 import com.kostazul.vitrina.model.entity.VitrinaCabecera;
+import com.kostazul.vitrina.model.entity.VitrinaImagen;
 import com.kostazul.vitrina.model.repository.VitrinaCabeceraRepository;
+import com.kostazul.vitrina.model.repository.VitrinaImagenRepository;
 import com.kostazul.vitrina.utils.factory.BodegaFactory;
 import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import lombok.AllArgsConstructor;
@@ -21,13 +23,15 @@ public class VitrinaCabeceraServices {
      * */
     private final VitrinaCabeceraRepository vitrinaCabeceraRepository;
 
+    private final VitrinaImagenRepository vitrinaImagenRepository;
+
     /**
      * guardar cabecera.
      * @param vitrinaCabecera cabecera.
      * @return cabecera.
      */
     public VitrinaCabecera guardarCabecera(final VitrinaCabecera vitrinaCabecera) {
-        if (vitrinaCabeceraRepository.existsByBodegaCodigoAndFechaInicioBetweenOrFechaFinBetween(
+        if (vitrinaCabeceraRepository.existsByBodegaCodigoAndFechas(
                 vitrinaCabecera.getBodega().getCodigo(),
                 vitrinaCabecera.getFechaInicio(),
                 vitrinaCabecera.getFechaFin(),
@@ -53,6 +57,8 @@ public class VitrinaCabeceraServices {
                         .fechaInicio(vitrinaCabecera.getFechaInicio())
                         .fechaFin(vitrinaCabecera.getFechaFin())
                         .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
+                        .imagenes(vitrinaCabecera.getImagenes().stream()
+                                .map(VitrinaImagen::getNombre).collect(Collectors.toList()))
                         .build()).collect(Collectors.toList());
     }
 
@@ -67,6 +73,8 @@ public class VitrinaCabeceraServices {
                         .fechaInicio(vitrinaCabecera.getFechaInicio())
                         .fechaFin(vitrinaCabecera.getFechaFin())
                         .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
+                        .imagenes(vitrinaCabecera.getImagenes().stream()
+                            .map(VitrinaImagen::getNombre).collect(Collectors.toList()))
                         .build()).orElseThrow(() -> new RuntimeException("No se encontro la cabecera"));
     }
 
@@ -78,6 +86,27 @@ public class VitrinaCabeceraServices {
     public Boolean eliminarCabecera(final int id){
         vitrinaCabeceraRepository.deleteById(id);
         return true;
+    }
+
+    /**
+     * actualizar lista de imagenes.
+     * @param listImages lista de imagenes
+     * @param id id de la vitrina cabecera
+     * @return verdadero
+     */
+    public boolean updateListImages(final List<VitrinaImagen> listImages, final int id){
+        try {
+        VitrinaCabecera vitrina = vitrinaCabeceraRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("No se encontro la cabecera"));
+        List<VitrinaImagen> imagenes = listImages.stream().map(vitrinaImagen -> {
+            vitrinaImagen.setVitrinaCabecera(vitrina);
+            return vitrinaImagen;
+        }).collect(Collectors.toList());
+        List<VitrinaImagen> vitrinaImagenUpdate = vitrinaImagenRepository.saveAll(imagenes);
+            return vitrinaImagenUpdate.size() == listImages.size();
+        } catch (Exception e){
+            throw new RuntimeException("No se encontro la cabecera");
+        }
     }
 
 }

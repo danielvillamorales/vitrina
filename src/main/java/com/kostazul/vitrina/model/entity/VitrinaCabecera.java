@@ -54,4 +54,11 @@ public class VitrinaCabecera {
     @OneToMany(mappedBy = "cabecera")
     private List<VitrinaDetalle> detalle;
 
+
+    /**
+     * imagenes de la cabecera.
+     */
+    @OneToMany(mappedBy = "vitrinaCabecera", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VitrinaImagen> imagenes;
+
 }
