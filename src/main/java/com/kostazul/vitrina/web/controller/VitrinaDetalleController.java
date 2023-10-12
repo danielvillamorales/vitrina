@@ -2,7 +2,6 @@ package com.kostazul.vitrina.web.controller;
 
 import com.kostazul.vitrina.model.entity.VitrinaDetalle;
 import com.kostazul.vitrina.services.VitrinaDetalleServices;
-import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import com.kostazul.vitrina.web.dto.VitrinaDetalleDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +42,9 @@ public class VitrinaDetalleController {
         return new ResponseEntity<>(vitrinaDetalleList, HttpStatus.OK);
     }
 
-
-
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> eliminarDetalle(@PathVariable("id") int id){
+        log.info("eliminar detalle");
+        return new ResponseEntity<>(vitrinaDetalleServices.eliminarDetalle(id), HttpStatus.OK);
+    }
 }

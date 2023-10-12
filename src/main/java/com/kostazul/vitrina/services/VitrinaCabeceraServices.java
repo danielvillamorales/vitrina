@@ -27,6 +27,15 @@ public class VitrinaCabeceraServices {
      * @return cabecera.
      */
     public VitrinaCabecera guardarCabecera(final VitrinaCabecera vitrinaCabecera) {
+        if (vitrinaCabeceraRepository.existsByBodegaCodigoAndFechaInicioBetweenOrFechaFinBetween(
+                vitrinaCabecera.getBodega().getCodigo(),
+                vitrinaCabecera.getFechaInicio(),
+                vitrinaCabecera.getFechaFin(),
+                vitrinaCabecera.getFechaInicio(),
+                vitrinaCabecera.getFechaFin()
+        )) {
+            throw new RuntimeException("Ya existe una vitrina para la bodega en ese rango de fechas");
+        }
         VitrinaCabecera vitrinaCabecera1 = vitrinaCabeceraRepository.save(vitrinaCabecera);
         log.info("vitrina cabecera creada: {}", vitrinaCabecera1);
         return vitrinaCabecera1;
@@ -59,6 +68,16 @@ public class VitrinaCabeceraServices {
                         .fechaFin(vitrinaCabecera.getFechaFin())
                         .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
                         .build()).orElseThrow(() -> new RuntimeException("No se encontro la cabecera"));
+    }
+
+    /**
+     * eliminar cabecera.
+     * @param id
+     * @return bolleano
+     */
+    public Boolean eliminarCabecera(final int id){
+        vitrinaCabeceraRepository.deleteById(id);
+        return true;
     }
 
 }

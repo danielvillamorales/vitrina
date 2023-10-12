@@ -52,4 +52,10 @@ public class VitrinaCabeceraController {
         VitrinaCabeceraDto vitrinaCabeceraList = vitrinaCabeceraServices.listarCabecera(id);
         return new ResponseEntity<>(vitrinaCabeceraList, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> eliminarCabecera(@PathVariable("id") int id){
+        log.info("eliminar cabecera");
+        return new ResponseEntity<>(vitrinaCabeceraServices.eliminarCabecera(id), HttpStatus.OK);
+    }
 }

@@ -66,4 +66,14 @@ public class VitrinaDetalleServices {
                         .build()
         ).collect(Collectors.toList());
     }
+
+    /**
+     * eliminar detalle.
+     * @param id
+     * @return
+     */
+    public Boolean eliminarDetalle(int id){
+        vitrinaDetalleRepository.deleteById(id);
+        return true;
+    }
 }
