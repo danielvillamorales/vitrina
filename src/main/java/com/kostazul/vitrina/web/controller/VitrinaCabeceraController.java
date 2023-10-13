@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/vitrina/cabecera")
 @AllArgsConstructor
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://psv.kostazul.com:9090", "http://localhost:4200", "http://192.168.0.13:9090"})
 public class VitrinaCabeceraController {
 
     /**

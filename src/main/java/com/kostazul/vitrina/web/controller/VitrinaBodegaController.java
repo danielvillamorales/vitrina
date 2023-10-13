@@ -14,7 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/vitrina/bodega")
 @AllArgsConstructor
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = {"http://psv.kostazul.com:9090", "http://localhost:4200", "http://192.168.0.13:9090"})
 @Slf4j
 public class VitrinaBodegaController {
 
