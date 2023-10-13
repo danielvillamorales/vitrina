@@ -27,7 +27,7 @@ public class VitrinaCabeceraController {
     /**
      * directorio de imagenes.
      */
-    private static final String UPLOAD_DIRECTORY = "/u/vitrinas/cargueImagenes/";
+    private static final String UPLOAD_DIRECTORY = "/u/vitrinas/dist/vitrinas/images/cargueImagenes/";
     private static final String UPLOAD_DIRECTORY2 = "/cargueImagenes/";
     /**
      * servicio de cabecera.
