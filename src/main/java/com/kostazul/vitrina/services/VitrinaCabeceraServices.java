@@ -109,4 +109,22 @@ public class VitrinaCabeceraServices {
         }
     }
 
+    public List<VitrinaCabeceraDto> findbyBodega(final String bodega){
+        List<VitrinaCabeceraDto> vitrinaCabeceraDtoList = vitrinaCabeceraRepository.findByBodegaCodigo(bodega)
+                .stream().map(vitrinaCabecera -> VitrinaCabeceraDto.builder()
+                        .id(vitrinaCabecera.getId())
+                        .nombre(vitrinaCabecera.getNombre())
+                        .fechaInicio(vitrinaCabecera.getFechaInicio())
+                        .fechaFin(vitrinaCabecera.getFechaFin())
+                        .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
+                        .imagenes(vitrinaCabecera.getImagenes().stream()
+                                .map(VitrinaImagen::getNombre).collect(Collectors.toList()))
+                        .build()).collect(Collectors.toList());
+        if (vitrinaCabeceraDtoList.isEmpty()){
+            throw new RuntimeException("No se encontro la cabecera");
+        }
+        return vitrinaCabeceraDtoList;
+    }
+
+
 }

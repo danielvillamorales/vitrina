@@ -6,7 +6,6 @@ import com.kostazul.vitrina.services.VitrinaCabeceraServices;
 import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,7 +27,7 @@ public class VitrinaCabeceraController {
     /**
      * directorio de imagenes.
      */
-    private static final String UPLOAD_DIRECTORY = "/importante/angular/vitrinas/vitrinas/src/assets/cargueImagenes/";
+    private static final String UPLOAD_DIRECTORY = "/u/vitrinas/cargueImagenes/";
     private static final String UPLOAD_DIRECTORY2 = "/cargueImagenes/";
     /**
      * servicio de cabecera.
@@ -101,5 +100,12 @@ public class VitrinaCabeceraController {
             throw new RuntimeException(e.toString());
         }
         return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
+    @GetMapping("/bodega/{bodega}")
+    public ResponseEntity<List<VitrinaCabeceraDto>> listarCabecera(@PathVariable("bodega") String bodega){
+        log.info("listar cabecera");
+        List<VitrinaCabeceraDto> vitrinaCabeceraList = vitrinaCabeceraServices.findbyBodega(bodega);
+        return new ResponseEntity<>(vitrinaCabeceraList, HttpStatus.OK);
     }
 }
