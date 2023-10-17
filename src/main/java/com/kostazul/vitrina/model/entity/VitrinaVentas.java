@@ -23,7 +23,7 @@ public class VitrinaVentas {
     private int id ;
 
     @Column(name = "ms_nit")
-    private int nit;
+    private String nit;
 
     private String cliente;
 
