@@ -29,7 +29,6 @@ public class VitrinaDetalleVentaDto {
 
     private VitrinaCabeceraDto cabecera;
 
-
     /**
      * observaciones de la referencia de la vitrina.
      */

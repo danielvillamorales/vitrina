@@ -31,4 +31,15 @@ public interface VitrinaCabeceraRepository extends JpaRepository<VitrinaCabecera
      * @return lista de cabeceras.
      */
     List<VitrinaCabecera> findByBodegaCodigo(String bodegaCodigo);
+
+    /**
+     * vitrinas en ese rango de fechas.
+     * @param fechaInicio busqueda de fecha inicio
+     * @param fechaFin busqueda de fecha fin
+     * @param fechaInicio2 busqueda de fecha inicio
+     * @param fechaFin2 busqueda de fecha fin
+     * @return lista de cabeceras
+     */
+    List<VitrinaCabecera> findByFechaInicioBetweenOrFechaFinBetween(Date fechaInicio, Date fechaFin,
+                                                                     Date fechaInicio2, Date fechaFin2);
 }

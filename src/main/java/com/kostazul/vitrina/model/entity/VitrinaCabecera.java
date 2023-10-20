@@ -22,7 +22,7 @@ public class VitrinaCabecera {
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     /**
      * nombre de la cabecera de la vitrina.

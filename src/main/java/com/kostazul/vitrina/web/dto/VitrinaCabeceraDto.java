@@ -20,7 +20,7 @@ public class VitrinaCabeceraDto {
     /**
      * identifcador de la vitrina.
      */
-    private int id;
+    private Long id;
     /**
      * nombre de la cabecera de la vitrina.
      */

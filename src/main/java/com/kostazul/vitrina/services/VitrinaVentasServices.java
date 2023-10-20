@@ -1,18 +1,19 @@
 package com.kostazul.vitrina.services;
 
-import com.kostazul.vitrina.model.entity.VitrinaCabecera;
-import com.kostazul.vitrina.model.entity.VitrinaDetalle;
-import com.kostazul.vitrina.model.entity.VitrinaVentas;
+import com.kostazul.vitrina.model.entity.*;
 import com.kostazul.vitrina.model.repository.VitrinaCabeceraRepository;
+import com.kostazul.vitrina.model.repository.VitrinaVentaFechaRepository;
 import com.kostazul.vitrina.model.repository.VitrinaVentasRepository;
 import com.kostazul.vitrina.utils.factory.BodegaFactory;
 import com.kostazul.vitrina.utils.factory.ReferenciaFactory;
+import com.kostazul.vitrina.web.dto.VitrinaCabeceraDetalleVtaDto;
 import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import com.kostazul.vitrina.web.dto.VitrinaDetalleVentaDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +25,9 @@ public class VitrinaVentasServices {
     private final VitrinaVentasRepository vitrinaVentasRepository;
 
     private final VitrinaCabeceraRepository vitrinaCabeceraRepository;
+
+    private final VitrinaVentaFechaRepository vitrinaVentaFechaRepository;
+
 
     /**
      * convierte las referencias en string
@@ -85,5 +89,73 @@ public class VitrinaVentasServices {
         return vitrina.getDetalle().stream().map(
                 vitrinaDetalle1 -> buildDto(vitrinaDetalle1, vitrinaVentasList)
             ).collect(Collectors.toList());
+    }
+
+    /**
+     * convert entuty to dto
+     * @param vitrinaCabecera
+     * @return dto
+     */
+    private static VitrinaCabeceraDto vitrinaCabeceraToDto(VitrinaCabecera vitrinaCabecera){
+        return VitrinaCabeceraDto.builder()
+                .id(vitrinaCabecera.getId())
+                .nombre(vitrinaCabecera.getNombre())
+                .fechaInicio(vitrinaCabecera.getFechaInicio())
+                .fechaFin(vitrinaCabecera.getFechaFin())
+                .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
+                .imagenes(vitrinaCabecera.getImagenes().stream()
+                        .map(VitrinaImagen::getNombre).collect(Collectors.toList()))
+                .build();
+    }
+
+
+    /**
+     * conversion
+     * @param ventas
+     * @param vitrina
+     * @return
+     */
+    private VitrinaCabeceraDetalleVtaDto transformDataVenta(final List<VitrinaVentaFecha> ventas,
+                                                                  final VitrinaCabecera vitrina ){
+        List<VitrinaVentaFecha> ventasFechas = ventas.stream().filter(venta -> venta.getCabecera()
+                        .equals(vitrina.getId()))
+                .collect(Collectors.toList());
+        long totalCantidad = ventasFechas.stream().mapToLong(VitrinaVentaFecha::getCantidad).sum();
+        long totalNeto = ventasFechas.stream().mapToLong(VitrinaVentaFecha::getNeto).sum();
+
+        return VitrinaCabeceraDetalleVtaDto.builder()
+                .cabecera(vitrinaCabeceraToDto(vitrina))
+                .totalCantidadVitrina(totalCantidad)
+                .totalNetoVitrina(totalNeto)
+                .detalles(ventasFechas)
+                .build();
+    }
+
+    /**
+     * obtiene las ventas por fecha
+     * @param fechaInicial fecha inicial
+     * @param fechaFinal fecha final
+     * @return lista de ventas
+     */
+    public List<VitrinaCabeceraDetalleVtaDto> getVentasByFecha(final Date fechaInicial, final Date fechaFinal){
+        List<VitrinaCabecera> vitrinas = vitrinaCabeceraRepository.findByFechaInicioBetweenOrFechaFinBetween(
+                fechaInicial, fechaFinal, fechaInicial, fechaFinal);
+        if (vitrinas.isEmpty()){
+            throw new RuntimeException("no hay vitrinas en el rango de fechas");
+        }
+        List<VitrinaVentaFecha> ventasFechas = vitrinaVentaFechaRepository.findByCabeceraIn(
+                vitrinas.stream().map(VitrinaCabecera::getId)
+                        .collect(Collectors.toList()));
+        if (ventasFechas.isEmpty()){
+            return vitrinas.stream().map(
+                    vitrinaCabecera -> VitrinaCabeceraDetalleVtaDto.builder()
+                            .cabecera(vitrinaCabeceraToDto(vitrinaCabecera))
+                            .totalCantidadVitrina(0L)
+                            .totalNetoVitrina(0L)
+                            .build()
+            ).collect(Collectors.toList());
+        }
+        return vitrinas.stream().map(vitrina -> transformDataVenta(ventasFechas, vitrina))
+                .collect(Collectors.toList());
     }
 }
