@@ -20,7 +20,7 @@ import java.util.Date;
 public class VitrinaVentas {
 
     @Id
-    private int id ;
+    private Long id ;
 
     @Column(name = "ms_nit")
     private String nit;
