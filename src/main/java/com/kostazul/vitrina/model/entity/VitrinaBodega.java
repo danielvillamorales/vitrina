@@ -1,5 +1,6 @@
 package com.kostazul.vitrina.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,6 +33,7 @@ public class VitrinaBodega {
     /**
      * lista de vitrinas de la bodega.
      */
+    @JsonIgnore
     @Column(name="vitrinas")
     @OneToMany(mappedBy = "bodega")
     private List<VitrinaCabecera> vitrinas;

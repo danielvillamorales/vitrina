@@ -8,6 +8,8 @@ import com.kostazul.vitrina.utils.factory.BodegaFactory;
 import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -49,17 +51,8 @@ public class VitrinaCabeceraServices {
      * listar cabecera.
      * @return lista de cabecera.
      */
-    public List<VitrinaCabeceraDto> listarCabecera(){
-        return vitrinaCabeceraRepository.findAll(Sort.by(Sort.Direction.DESC, "fechaInicio"))
-                .stream().map(vitrinaCabecera -> VitrinaCabeceraDto.builder()
-                        .id(vitrinaCabecera.getId())
-                        .nombre(vitrinaCabecera.getNombre())
-                        .fechaInicio(vitrinaCabecera.getFechaInicio())
-                        .fechaFin(vitrinaCabecera.getFechaFin())
-                        .bodega(BodegaFactory.convertEntityToDto(vitrinaCabecera.getBodega()))
-                        .imagenes(vitrinaCabecera.getImagenes().stream()
-                                .map(VitrinaImagen::getNombre).toList())
-                        .build()).toList();
+    public Page<VitrinaCabecera> listarCabecera(Pageable pageable){
+        return vitrinaCabeceraRepository.findAll(pageable);
     }
 
     /**

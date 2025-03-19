@@ -1,5 +1,6 @@
 package com.kostazul.vitrina.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,7 @@ public class VitrinaImagen {
 
     private String nombre;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "vitrina_cabecera_id")
     private VitrinaCabecera vitrinaCabecera;

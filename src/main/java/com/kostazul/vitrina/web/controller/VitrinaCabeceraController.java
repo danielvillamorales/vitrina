@@ -6,6 +6,8 @@ import com.kostazul.vitrina.services.VitrinaCabeceraServices;
 import com.kostazul.vitrina.web.dto.VitrinaCabeceraDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,9 +58,9 @@ public class VitrinaCabeceraController {
      * @return
      */
     @GetMapping
-    public ResponseEntity<List<VitrinaCabeceraDto>> listarCabecera(){
+    public ResponseEntity<Page<VitrinaCabecera>> listarCabecera(Pageable pageable){
         log.info("listar cabecera");
-        List<VitrinaCabeceraDto> vitrinaCabeceraList = vitrinaCabeceraServices.listarCabecera();
+        Page<VitrinaCabecera> vitrinaCabeceraList = vitrinaCabeceraServices.listarCabecera(pageable);
         return new ResponseEntity<>(vitrinaCabeceraList, HttpStatus.OK);
     }
 
