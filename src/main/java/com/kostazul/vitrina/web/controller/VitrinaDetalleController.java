@@ -35,21 +35,18 @@ public class VitrinaDetalleController {
      */
     @PostMapping
     public ResponseEntity<VitrinaDetalleDto> guardarDetalle(@RequestBody VitrinaDetalle vitrinaDetalle){
-        log.info("guardar detalle", vitrinaDetalle);
         VitrinaDetalleDto vitrinaDetalle1 = vitrinaDetalleServices.guardarDetalle(vitrinaDetalle);
         return new ResponseEntity<>(vitrinaDetalle1, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<VitrinaDetalleDto>> listarVitrinaDetalle(@RequestParam("id") int id){
-        log.info("listar detalle");
         List<VitrinaDetalleDto> vitrinaDetalleList = vitrinaDetalleServices.listarVitrinaDetalle(id);
         return new ResponseEntity<>(vitrinaDetalleList, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> eliminarDetalle(@PathVariable("id") int id){
-        log.info("eliminar detalle");
         return new ResponseEntity<>(vitrinaDetalleServices.eliminarDetalle(id), HttpStatus.OK);
     }
 }
