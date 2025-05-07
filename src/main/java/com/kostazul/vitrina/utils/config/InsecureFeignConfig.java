@@ -2,11 +2,13 @@ package com.kostazul.vitrina.utils.config;
 
 import feign.Client;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import javax.net.ssl.*;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 
+@Configuration
 public class InsecureFeignConfig {
 
     @Bean
@@ -29,5 +31,10 @@ public class InsecureFeignConfig {
 
         // Devolver el Feign Client inseguro
         return new Client.Default(sslSocketFactory, hostnameVerifier);
+    }
+
+    @Bean
+    public SecretKeyInterceptor secretKeyInterceptor() {
+        return new SecretKeyInterceptor();
     }
 }
