@@ -17,7 +17,9 @@ public final class PermisosFactory {
                 .codigo(permiso.getUsuariodepermiso().getUsername())
                 .nombre(permiso.getUsuariodepermiso().getFirst_name() + " "
                         + permiso.getUsuariodepermiso().getLast_name())
-                .descripcion(permiso.getDescripcion())
+                .descripcion(permiso.getDescripcion() != null && permiso.getDescripcion().length() > 250
+                        ? permiso.getDescripcion().substring(0, 250)
+                        : permiso.getDescripcion())
                 .fecha_inicio(converStringToDate(permiso.getFechaInicial()))
                 .fecha_fin(converStringToDate(permiso.getFechaFinal()))
                 .tipo_permiso(permiso.getTipopermiso().getDescripcion())
